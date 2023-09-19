@@ -1,4 +1,4 @@
-```markdown
+
 # Medium Clone Project
 
 This project is a Medium clone built using React, Next.js, Tailwind CSS, and Supabase. It aims to replicate some of the core features of the Medium platform, allowing users to read and publish articles.
