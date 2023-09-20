@@ -32,7 +32,7 @@ This project is a Medium clone built using React, Next.js, Tailwind CSS, and Sup
 
 ## Usage In Production
 
-Visit:
+Visit: https://medium-clone-nextjs-supabase.vercel.app
 
 ## Getting Started In Development
 
