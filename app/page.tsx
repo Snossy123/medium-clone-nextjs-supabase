@@ -1,14 +1,31 @@
+"use client"
 import NavbarSection from "@/components/Navbar";
 import PostCard from "@/components/PostCard";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useState, useEffect } from "react";
 
-export default async function Index() {
-  const supabase = createServerComponentClient({ cookies });
+export default function Index() {
+  const [articles, setArticles] = useState<any>();
+  const supabase = createClientComponentClient();
 
-  const { data: articles } = await supabase.from("articles").select("*");
-  
-  // console.log(articles);
+  useEffect(() => {
+    const getPosts = async () => {
+      try {
+        const { data, error } = await supabase.from("articles").select("*");
+
+        if (error) {
+            console.error('Error fetching articles:', error.message);
+        } else if (data) {
+            console.log(data);
+            setArticles(data);
+        }
+      } catch (error: any) {
+          console.error('Error fetching articles:', error.message);
+      }
+    }
+    getPosts();
+  }, [])
+
   return (
     <div className="w-full flex flex-col items-center">
       <NavbarSection />
@@ -22,12 +39,16 @@ export default async function Index() {
           </p>
           <div className="container px-5 py-24 mx-auto">
             <div className="-my-8 divide-y-2 divide-gray-100">
-              {/* Pass the Props type as a generic parameter */}
-              {articles?.map((article) => {
-                return <PostCard postcard={article} />
-              })}
+              {articles ?
+                articles?.map((article:any) => {
+                  return <PostCard postcard={article} />;
+                }) :
+                <p>Not articles added yet</p>
+              }
             </div>
-            <button className="flex mx-auto mt-20 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">See More.....</button>
+            <button className="flex mx-auto mt-20 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+              See More.....
+            </button>
           </div>
         </section>
       </div>

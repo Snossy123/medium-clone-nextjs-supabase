@@ -14,9 +14,9 @@ import { Label } from "@/components/ui/label";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { createClientComponentClient} from '@supabase/auth-helpers-nextjs';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 
 type Props = {};
 type InputData = {
@@ -63,38 +63,38 @@ const CreateArticleSection = (props: Props) => {
     const {
         register,
         handleSubmit,
-        reset,
-        formState: { errors }
-    } = useForm<InputData>({
+        reset, 
+        formState: { errors } 
+    } = useForm<any>({
         resolver: yupResolver(schema)
     });
 
     // insert data to supabase
     const onSubmit: SubmitHandler<InputData> = async (formData) => {
         try {
-          const { data, error } = await supabase
-            .from('articles')
-            .insert([
-              {
-                user_id: user?.id,
-                title: formData.title,
-                content: formData.text,
-                user_email: user?.email,
-              },
-            ])
-            .select();
-    
-          if (error) {
-            setError("Creating Failed 😥");
-          } else if (data) {
-            setSuccess("Creating Successfully 😇");
-            reset();
-            router.push('/');
-          }
+            const { data, error } = await supabase
+                .from('articles')
+                .insert([
+                    {
+                        user_id: user?.id,
+                        title: formData.title,
+                        content: formData.text,
+                        user_email: user?.email,
+                    },
+                ])
+                .select();
+
+            if (error) {
+                setError("Creating Failed 😥");
+            } else if (data) {
+                setSuccess("Creating Successfully 😇");
+                reset();
+                router.push('/');
+            }
         } catch (error) {
-          setError("Creating Failed 😥");
+            setError("Creating Failed 😥");
         }
-      };
+    };
 
     return (
         <div className='flex min-h-[90vh] items-center justify-center'>
@@ -111,7 +111,9 @@ const CreateArticleSection = (props: Props) => {
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="title">Title</Label>
                                 <Input id="title" placeholder="Title of your article" {...register("title")} />
-                                <p className='text-red-500'>{errors.title?.message}</p>
+                                <p className='text-red-500'>{typeof errors?.title?.message === 'string' && <span>{errors.title.message}</span>}</p>
+
+
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="text">Article Text</Label>
@@ -122,7 +124,9 @@ const CreateArticleSection = (props: Props) => {
                                     wt-ignore-input="true"
                                     {...register("text")}
                                 ></textarea>
-                                <p className='text-red-500'>{errors.text?.message}</p>
+                                <p className='text-red-500'>{typeof errors?.text?.message === 'string' && <span>{errors.text.message}</span>}</p>
+
+
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="title">Created By {user?.email}</Label>

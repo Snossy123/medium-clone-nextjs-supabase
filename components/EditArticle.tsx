@@ -69,7 +69,7 @@ const EditArticleSection = (props: any) => {
         handleSubmit,
         reset,
         formState: { errors }
-    } = useForm<InputData>({
+    } = useForm<any>({
         resolver: yupResolver(schema)
     });
 
@@ -114,7 +114,7 @@ const EditArticleSection = (props: any) => {
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="title">Title</Label>
                                 <Input id="title" placeholder="Title of your article" {...register("title")} defaultValue={article.title} />
-                                <p className='text-red-500'>{errors.title?.message}</p>
+                                <p className='text-red-500'>{typeof errors?.title?.message === 'string' && <span>errors.title.message</span>}</p>
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="text">Article Text</Label>
@@ -126,7 +126,7 @@ const EditArticleSection = (props: any) => {
                                     {...register("text")}
                                     defaultValue={article.content}
                                 ></textarea>
-                                <p className='text-red-500'>{errors.text?.message}</p>
+                                <p className='text-red-500'>{typeof errors?.text?.message === 'string' && <span>errors.text.message</span>}</p> 
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="title">Created By {user?.email}</Label>
